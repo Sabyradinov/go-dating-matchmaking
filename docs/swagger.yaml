@@ -1,0 +1,64 @@
+basePath: /github.com/Sabyradinov/go-dating-matchmaking/api/v1
+definitions:
+  common.BaseResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  version: "1.0"
+paths:
+  /match/recommendations:
+    post:
+      consumes:
+      - application/json
+      description: method to recommend potential matches for a user based on certain
+        criteria, such as preferences, location, and mutual interests
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response body
+          schema:
+            $ref: '#/definitions/common.BaseResponse'
+        "400":
+          description: error body
+          schema:
+            $ref: '#/definitions/common.BaseResponse'
+        "404":
+          description: error body
+          schema:
+            $ref: '#/definitions/common.BaseResponse'
+      summary: method to get potential matches
+      tags:
+      - Matching
+  /matching/:id:
+    get:
+      consumes:
+      - application/json
+      description: method to get user by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: response body
+          schema:
+            $ref: '#/definitions/common.BaseResponse'
+        "400":
+          description: error body
+          schema:
+            $ref: '#/definitions/common.BaseResponse'
+        "404":
+          description: error body
+          schema:
+            $ref: '#/definitions/common.BaseResponse'
+      summary: method to get user by id
+      tags:
+      - Matching
+schemes:
+- https
+swagger: "2.0"

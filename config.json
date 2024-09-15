@@ -1,0 +1,21 @@
+{
+  "DB": {
+    "ConnectionString": "host=localhost port=5432 dbname=datingapp sslmode=disable",
+      "Name": "datingapp",
+    "LogMode": true
+  },
+  "StopTimeoutMS": 5000,
+  "WebServer": {
+    "Port": 8080,
+    "GIN": {
+      "ReleaseMode": false,
+      "UseLogger": true,
+      "UseRecovery": true
+    }
+  },
+  "SwaggerUI": {
+    "PageTitle": "go-dating-matchmaking",
+    "Host": "sabyradinov.dev",
+    "Description": "Swagger description"
+  }
+}
