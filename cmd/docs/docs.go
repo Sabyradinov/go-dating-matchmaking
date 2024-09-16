@@ -17,7 +17,7 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/match/recommendations": {
-            "post": {
+            "get": {
                 "description": "method to recommend potential matches for a user based on certain criteria, such as preferences, location, and mutual interests",
                 "consumes": [
                     "application/json"
@@ -29,11 +29,32 @@ const docTemplate = `{
                     "Matching"
                 ],
                 "summary": "method to get potential matches",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "response body",
                         "schema": {
-                            "$ref": "#/definitions/common.BaseResponse"
+                            "$ref": "#/definitions/model.UserResponse"
                         }
                     },
                     "400": {
@@ -51,7 +72,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/matching/:id": {
+        "/matching/curren-user/:id": {
             "get": {
                 "description": "method to get user by id",
                 "consumes": [
@@ -64,6 +85,15 @@ const docTemplate = `{
                     "Matching"
                 ],
                 "summary": "method to get user by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "response body",
@@ -99,6 +129,40 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "model.UserData": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "interests": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserResponse": {
+            "type": "object",
+            "properties": {
+                "potentialMatches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.UserData"
+                    }
+                }
+            }
         }
     }
 }`
@@ -107,7 +171,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/github.com/Sabyradinov/go-dating-matchmaking/api/v1",
+	BasePath:         "/api",
 	Schemes:          []string{"https"},
 	Title:            "",
 	Description:      "",

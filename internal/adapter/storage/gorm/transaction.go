@@ -5,21 +5,21 @@ import (
 	"time"
 )
 
-func (dbm *dbClient) GetFirst(ctx context.Context, dest interface{}, conds ...interface{}) (err error) {
+func (dbm *dbClient) GetFirst(ctx context.Context, dest interface{}, query interface{}, args ...interface{}) (err error) {
 	ctxTimeout, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	tx := dbm.db.WithContext(ctxTimeout)
-	err = tx.First(&dest, conds).Error
+	err = tx.Where(query, args).First(&dest).Error
 	return
 }
 
-func (dbm *dbClient) GetByScript(ctx context.Context, dest interface{}, sql string, value []interface{}, limit, offset int) (err error) {
+func (dbm *dbClient) GetByScript(ctx context.Context, dest interface{}, limit, offset int, sql string, values []interface{}) (err error) {
 	ctxTimeout, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	tx := dbm.db.WithContext(ctxTimeout)
-	err = tx.Raw(sql, value...).Limit(limit).Offset(offset).Scan(&dest).Error
+	err = tx.Raw(sql, values...).Limit(limit).Offset(offset).Find(dest).Error
 
 	return
 }

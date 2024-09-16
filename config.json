@@ -15,7 +15,10 @@
   },
   "SwaggerUI": {
     "PageTitle": "go-dating-matchmaking",
-    "Host": "sabyradinov.dev",
-    "Description": "Swagger description"
+    "Host": "localhost:8080",
+    "Description": "Swagger description",
+    "Schemes": [
+      "http"
+    ]
   }
 }

@@ -1,7 +1,15 @@
 package model
 
-// UserResponse response to create product
+// UserResponse response to user matching
 type UserResponse struct {
-	Id         int64  `json:"id"`
-	StatusCode string `json:"statusCode"`
+	PotentialMatches []UserData
+}
+
+// UserData response to user data
+type UserData struct {
+	UserID    string
+	Name      string
+	Age       int
+	Gender    string
+	Interests []string
 }

@@ -65,6 +65,12 @@ Golang project with hexagonal architecture
     go run cmd/server/main.go
     ```
 
+5. **Update swagger documentation:**
+
+    ```sh
+    swag init -g ./cmd/server/main.go -o cmd/docs
+    ```
+
 ### Running Tests
 
 To run the tests, use the following command:

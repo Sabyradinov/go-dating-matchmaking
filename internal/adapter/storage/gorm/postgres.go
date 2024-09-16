@@ -19,7 +19,7 @@ type dbClient struct {
 func InitDB(cfg *config.Configs) (storage.IDB, error) {
 
 	gormDB, err := gorm.Open(postgres.Open(cfg.DB.ConnectionString), &gorm.Config{
-		Logger:      logger.Default.LogMode(1),
+		Logger:      logger.Default.LogMode(logger.Info),
 		PrepareStmt: true,
 	})
 
@@ -44,6 +44,13 @@ func (dbm *dbClient) RegisterMetrics(dbname string) (err error) {
 }
 
 func (dbm *dbClient) Migrate() (err error) {
+
+	// Create the database if it doesn't exist
+	err = dbm.db.Exec("CREATE DATABASE IF NOT EXISTS datingapp").Error
+	if err != nil {
+		return err
+	}
+
 	// Create table for `User`
 	err = dbm.db.Migrator().CreateTable(&entity.User{})
 	if err != nil {

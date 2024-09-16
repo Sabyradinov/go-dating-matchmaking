@@ -1,4 +1,4 @@
-basePath: /github.com/Sabyradinov/go-dating-matchmaking/api/v1
+basePath: /api
 definitions:
   common.BaseResponse:
     properties:
@@ -8,23 +8,59 @@ definitions:
       message:
         type: string
     type: object
+  model.UserData:
+    properties:
+      age:
+        type: integer
+      gender:
+        type: string
+      interests:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      userID:
+        type: string
+    type: object
+  model.UserResponse:
+    properties:
+      potentialMatches:
+        items:
+          $ref: '#/definitions/model.UserData'
+        type: array
+    type: object
 info:
   contact: {}
   version: "1.0"
 paths:
   /match/recommendations:
-    post:
+    get:
       consumes:
       - application/json
       description: method to recommend potential matches for a user based on certain
         criteria, such as preferences, location, and mutual interests
+      parameters:
+      - description: userId
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: response body
           schema:
-            $ref: '#/definitions/common.BaseResponse'
+            $ref: '#/definitions/model.UserResponse'
         "400":
           description: error body
           schema:
@@ -36,11 +72,17 @@ paths:
       summary: method to get potential matches
       tags:
       - Matching
-  /matching/:id:
+  /matching/curren-user/:id:
     get:
       consumes:
       - application/json
       description: method to get user by id
+      parameters:
+      - description: userId
+        in: query
+        name: userId
+        required: true
+        type: string
       produces:
       - application/json
       responses:

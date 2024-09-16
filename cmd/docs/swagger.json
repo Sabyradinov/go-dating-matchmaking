@@ -7,10 +7,10 @@
         "contact": {},
         "version": "1.0"
     },
-    "basePath": "/github.com/Sabyradinov/go-dating-matchmaking/api/v1",
+    "basePath": "/api",
     "paths": {
         "/match/recommendations": {
-            "post": {
+            "get": {
                 "description": "method to recommend potential matches for a user based on certain criteria, such as preferences, location, and mutual interests",
                 "consumes": [
                     "application/json"
@@ -22,11 +22,32 @@
                     "Matching"
                 ],
                 "summary": "method to get potential matches",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "response body",
                         "schema": {
-                            "$ref": "#/definitions/common.BaseResponse"
+                            "$ref": "#/definitions/model.UserResponse"
                         }
                     },
                     "400": {
@@ -44,7 +65,7 @@
                 }
             }
         },
-        "/matching/:id": {
+        "/matching/curren-user/:id": {
             "get": {
                 "description": "method to get user by id",
                 "consumes": [
@@ -57,6 +78,15 @@
                     "Matching"
                 ],
                 "summary": "method to get user by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "response body",
@@ -90,6 +120,40 @@
                 "data": {},
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "model.UserData": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "interests": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserResponse": {
+            "type": "object",
+            "properties": {
+                "potentialMatches": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.UserData"
+                    }
                 }
             }
         }

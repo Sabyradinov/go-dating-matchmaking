@@ -5,6 +5,9 @@ import (
 	"github.com/Sabyradinov/go-dating-matchmaking/internal/adapter/storage/repo"
 	"github.com/Sabyradinov/go-dating-matchmaking/internal/domain/port/repository"
 	"github.com/Sabyradinov/go-dating-matchmaking/internal/domain/port/service"
+	"github.com/Sabyradinov/go-dating-matchmaking/internal/dto"
+	"github.com/Sabyradinov/go-dating-matchmaking/internal/model"
+	"github.com/lib/pq"
 	"sort"
 )
 
@@ -16,10 +19,10 @@ func New(repo *repo.Builder) service.IMatching {
 	return &matching{userRepo: repo.User}
 }
 
-func (s *matching) GetPotentialMatches(ctx context.Context, userID string, offset, limit int) (res interface{}, err error) {
+func (s *matching) GetPotentialMatches(ctx context.Context, userID string, offset, limit int) (res model.UserResponse, err error) {
 	currentUser, err := s.userRepo.GetById(ctx, userID)
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	potentialMatches, err := s.userRepo.GetPotentialMatches(ctx, currentUser, offset, limit)
@@ -34,11 +37,13 @@ func (s *matching) GetPotentialMatches(ctx context.Context, userID string, offse
 		return potentialMatches[i].Rank > potentialMatches[j].Rank
 	})
 
+	res.PotentialMatches = dto.ToUserData(potentialMatches)
+
 	return
 }
 
 // calculateMutualInterests calculates the number of mutual interests between two users
-func calculateMutualInterests(interests1, interests2 []string) int {
+func calculateMutualInterests(interests1, interests2 pq.StringArray) int {
 	interestSet := make(map[string]struct{})
 	for _, interest := range interests1 {
 		interestSet[interest] = struct{}{}

@@ -24,12 +24,18 @@ func NewMatching(opt *Options) *Matching {
 // @Tags Matching
 // @Accept  json
 // @Produce  json
-// @query userId string true "userId"
-// @Success 200 {object} common.BaseResponse{} "response body"
+// @Param userId query string true "userId"
+// @Param page query int false "page"
+// @Param size query int false "size"
+// @Success 200 {object} model.UserResponse "response body"
 // @Failure 400,404 {object} common.BaseResponse{} "error body"
-// @Router /match/recommendations [post]
+// @Router /match/recommendations [get]
 func (h Matching) GetPotentialMatches(ctx *gin.Context) {
-	userId := ctx.Query("userId")
+	userId, ok := ctx.GetQuery("userId")
+	if !ok {
+		h.log.ErrorWithCode(ctx, "GetPotentialMatches", -911, "validation error", nil)
+		return
+	}
 	pageStr := ctx.Query("page")
 	sizeStr := ctx.Query("size")
 
@@ -49,11 +55,7 @@ func (h Matching) GetPotentialMatches(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, common.BaseResponse{
-		Code:    0,
-		Message: "success",
-		Data:    res,
-	})
+	ctx.JSON(http.StatusOK, res)
 }
 
 // GetUserById method to get user by id
@@ -62,12 +64,16 @@ func (h Matching) GetPotentialMatches(ctx *gin.Context) {
 // @Tags Matching
 // @Accept  json
 // @Produce  json
-// @Query userId string true "userId"
+// @Param userId query string true "userId"
 // @Success 200 {object} common.BaseResponse{} "response body"
 // @Failure 400,404 {object} common.BaseResponse{} "error body"
-// @Router /matching/:id [get]
+// @Router /matching/curren-user/:id [get]
 func (h Matching) GetUserById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
+	if len(userId) == 0 {
+		h.log.ErrorWithCode(ctx, "GetPotentialMatches", -911, "validation error", nil)
+		return
+	}
 
 	res, err := h.srv.GetUserById(ctx, userId)
 	if err != nil {

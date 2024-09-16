@@ -7,6 +7,6 @@ type IDB interface {
 	Close() (err error)
 	Migrate() (err error)
 
-	GetFirst(ctx context.Context, dest interface{}, conds ...interface{}) (err error)
-	GetByScript(ctx context.Context, dest interface{}, sql string, value []interface{}, limit, offset int) (err error)
+	GetFirst(ctx context.Context, dest interface{}, query interface{}, args ...interface{}) (err error)
+	GetByScript(ctx context.Context, dest interface{}, limit, offset int, sql string, values []interface{}) (err error)
 }

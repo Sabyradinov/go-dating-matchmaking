@@ -26,6 +26,7 @@ type SwaggerConfig struct {
 	PageTitle   string
 	Host        string
 	Description string
+	Schemes     []string
 }
 
 // WebServerConfig server configs

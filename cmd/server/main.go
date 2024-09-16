@@ -15,7 +15,7 @@ import (
 
 // @version 1.0
 // @schemes https
-// @BasePath /github.com/Sabyradinov/go-dating-matchmaking/api
+// @BasePath /api
 // @query.collection.format multi
 func main() {
 	quit := make(chan os.Signal)
